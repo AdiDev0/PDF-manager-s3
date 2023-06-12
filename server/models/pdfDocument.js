@@ -24,7 +24,7 @@ const documentSchema = new mongoose.Schema({
     }
   })
 
-// var pdfDocument = mongoose.model('pdfDocument', documentSchema);
+const pdfDocument = mongoose.model('pdfDocument', documentSchema);
 
-export default mongoose.model("pdfDocument", documentSchema);
+export default pdfDocument;
 
