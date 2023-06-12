@@ -115,3 +115,6 @@ https://drive.google.com/file/d/1flqUgnAy1Ts6id2JyRqv-kzD0wG0c4Ae/view?usp=shari
 ## Screenshots
 
 
+![Screenshot (55)](https://github.com/AdiDev0/pdf-manager-s3/assets/85286921/6eabb2ad-89a4-4503-97cc-56798ef90f24)
+
+![Screenshot (57)](https://github.com/AdiDev0/pdf-manager-s3/assets/85286921/42faa576-5e46-4069-bd14-617d67fd8c6a)
