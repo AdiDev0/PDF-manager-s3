@@ -1,70 +1,117 @@
-# Getting Started with Create React App
+# PDF-manager-app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+**The project I have developed is a web application that allows users to upload PDF files through a form, which are then stored in an S3 bucket. The application provides a seamless experience for managing and accessing these uploaded PDFs. Let's explore the key features in more detail:**
 
-In the project directory, you can run:
+1. **PDF Upload Form:**
+The web application features a user-friendly form where users can select and upload PDF files. Once a file is submitted, it is securely stored in an S3 bucket, ensuring reliable and scalable storage for the PDF documents.
 
-### `npm start`
+2. **Dashboard:**
+After uploading a PDF, the name of the document is displayed on a dashboard, providing users with a quick overview of the uploaded files. This allows users to easily keep track of the documents they have uploaded.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+3. **PDF Viewing and Commenting:**
+Users can view the uploaded PDF files directly within the web application. The application provides a convenient interface for navigating through the pages of the PDF for a better reading experience. Additionally, users have the ability to add comments to specific sections of the PDF, enhancing collaboration and facilitating discussions related to the document's content.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+4. **Global Link Sharing:**
+The web application generates a global link for each uploaded PDF, making it accessible from anywhere. This link can be shared with others, allowing them to view the PDF without requiring them to log in to the application. This feature enables easy sharing and distribution of the PDF documents while maintaining the necessary privacy and security measures.
 
-### `npm test`
+5. **PDF Deletion:**
+In addition to the features mentioned earlier, users also have the ability to delete PDF files from the web application. This functionality provides a convenient way to remove unwanted or outdated documents from the system. Users can select a specific PDF from the dashboard and initiate the deletion process, ensuring control and flexibility over the stored files.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+6. **PDF Searching:**
+To enhance usability and accessibility, a powerful searching functionality has been implemented within the web application. Users can easily search for PDF files based on their names. By entering relevant keywords or the full name of a document into the search bar, the application quickly retrieves and displays matching results. This feature saves time and effort by enabling users to locate specific PDFs efficiently.
 
-### `npm run build`
+**By combining the capabilities of PDF uploading, document management, viewing, commenting, deleting, searching and global link sharing, this web application offers a comprehensive solution for handling PDF files in a user-friendly and efficient manner.**
+## Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Install PDF-manager with npm
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+   cd client
+   npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   cd server
+   npm install 
+```
+    
+## API Reference
 
-### `npm run eject`
+#### Get all pdfs
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```http
+  GET /
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+|   `empty` | `string` | Fetches PDF data like name, Description from server |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+#### Upload Form
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```http
+  POST /upload
+```
 
-## Learn More
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `string, file`| `string` | **Required**. `headers: {'Content-Type': 'multipart form-data'}` |
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### Get Global link
+```http
+  GET /pdf/getLink/id
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+|   `id`    | `string` | **Required** `id` `Fetches Global link of a PDF`|
 
-### Code Splitting
+#### Get pdf
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```http
+  GET /pdf/id
+```
 
-### Analyzing the Bundle Size
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+|   `id`    | `string` | `Fetches PDF data from s3` |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+#### Deletes a pdf
+```http
+  DELETE /id
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+|   `id`    | `string` | **Required** `id` `Deletes a pdf` |
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+## Tech Stack
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+**Client:** React
 
-### `npm run build` fails to minify
+**Server:** Node, Express
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Database**: mongoDB
+
+**AWS** : s3 
+
+
+## 🔗 Links
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/AdiDev0)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/aditya-raj-521376188/)
+
+
+## Author
+
+- [@AdiDev](https://github.com/AdiDev0)
+
+
+## Demo
+
+
+https://drive.google.com/file/d/1flqUgnAy1Ts6id2JyRqv-kzD0wG0c4Ae/view?usp=sharing
+## Screenshots
+
+
