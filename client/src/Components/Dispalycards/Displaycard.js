@@ -16,7 +16,7 @@ const Displaycard = ({ _id, name, description, file, createdAt, fnToReload }) =>
     const handleDelete = () => {
         // Handle delete logic
 
-        axios.delete(`http://localhost:5000/${_id}`)
+        axios.delete(`https://pdf-manager-s3.onrender.com/${_id}`)
             .then((res) => {
                 console.log(res.data);
                 fnToReload(prev => prev + 1)
@@ -30,7 +30,7 @@ const Displaycard = ({ _id, name, description, file, createdAt, fnToReload }) =>
 
     const handleCopy = () => {
         const textField = document.createElement('textarea');
-        textField.innerText = `http://localhost:5000/pdf/${_id}`;
+        textField.innerText = `https://pdf-manager-s3.onrender.com/pdf/${_id}`;
         document.body.appendChild(textField);
         textField.select();
         document.execCommand('copy');

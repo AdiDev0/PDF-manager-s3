@@ -4,7 +4,7 @@ import axios from 'axios';
 import FileBase from 'react-file-base64'
 
 
-const URL = 'http://localhost:5000';
+const URL = 'https://pdf-manager-s3.onrender.com';
 
 const Form = ({ fnToReload }) => {
   const [formdata, setFormdata] = useState({ name: '', description: '', file: null });
@@ -17,7 +17,7 @@ const Form = ({ fnToReload }) => {
     console.log(formdata);
 
 
-    axios.post('http://localhost:5000/upload', formdata, {
+    axios.post('https://pdf-manager-s3.onrender.com/upload', formdata, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

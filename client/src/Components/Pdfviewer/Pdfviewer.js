@@ -43,7 +43,7 @@ const Pdfviewer = () => {
     useEffect(() => {
         if (id.length > 0) {
             console.log(id)
-            axios.get(`http://localhost:5000/pdf/${id}`, {
+            axios.get(`https://pdf-manager-s3.onrender.com/pdf/${id}`, {
                 responseType: 'arraybuffer',
             })
                 .then((res) => {

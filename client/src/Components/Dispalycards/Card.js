@@ -100,7 +100,7 @@ const Card = ({ reload, fnToReload, searchString }) => {
 
     useEffect(() => {
         if (searchString) {
-            axios.get('http://localhost:5000/')
+            axios.get('https://pdf-manager-s3.onrender.com/')
                 .then((res) => {
                     const result = res.data;
 
@@ -113,7 +113,7 @@ const Card = ({ reload, fnToReload, searchString }) => {
                 })
         }
         else{
-            axios.get('http://localhost:5000/')
+            axios.get('https://pdf-manager-s3.onrender.com/')
                 .then((res) => {
                     const data = res.data;
                     const sortedData = [...data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
