@@ -18,13 +18,9 @@ app.use(cors());
 app.use(routes)
 
 
-const password = encodeURIComponent(process.env.DATABASE_PASSWORD);
-
-
-
 const PORT = process.env.PORT || 5000;
 
-const uri = `mongodb+srv://adityapdf:${password}@pdfcluster.n4rm69m.mongodb.net/?retryWrites=true&w=majority`;
+const uri = process.env.DATABASE_URL;
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`)))
