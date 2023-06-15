@@ -26,7 +26,7 @@ const Pdfviewer = () => {
     useEffect(() => {
         setId(temp.id);
         if (id.length > 0) {
-            axios.get(`http://localhost:5000/getName/${id}`)
+            axios.get(`https://pdf-manager-s3-v2.onrender.com/getName/${id}`)
                 .then((res) => {
                     console.log(res.data)
                     setName(res.data.name)
@@ -57,7 +57,7 @@ const Pdfviewer = () => {
     useEffect(() => {
         if (id.length > 0) {
             console.log(id)
-            axios.get(`http://localhost:5000/pdf/${id}`, {
+            axios.get(`https://pdf-manager-s3-v2.onrender.com/pdf/${id}`, {
                 responseType: 'arraybuffer',
             })
                 .then((res) => {

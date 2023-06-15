@@ -36,7 +36,7 @@ const CommentForm = ({ client, setReload, pdfid }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    axios.post('http://localhost:5000/submitComment', {author: client, pdfid, comment}, {headers: { 'Content-Type': 'application/json'}}).then((res)=>{
+    axios.post('https://pdf-manager-s3-v2.onrender.com/submitComment', {author: client, pdfid, comment}, {headers: { 'Content-Type': 'application/json'}}).then((res)=>{
       console.log(res);
       setComment('');
       setReload(prev => prev+1)
@@ -80,7 +80,7 @@ const CommentForm = ({ client, setReload, pdfid }) => {
 //     const comment = editorState.getCurrentContent().getPlainText();
 //     // You can also get the HTML or Markdown content from the editorState if needed
 
-//     axios.post('http://localhost:5000/submitComment', {author: client, pdfid, comment}, {headers: { 'Content-Type': 'application/json'}}).then((res)=>{
+//     axios.post('https://pdf-manager-s3-v2.onrender.com/submitComment', {author: client, pdfid, comment}, {headers: { 'Content-Type': 'application/json'}}).then((res)=>{
 //       console.log(res);
 //       setComment('');
 //       setReload(prev => prev+1)
@@ -127,7 +127,7 @@ const CommentSection = ({ client, pdfid }) => {
   
 
   useEffect(() => {
-    axios.get('http://localhost:5000/comments').then((res)=>{
+    axios.get('https://pdf-manager-s3-v2.onrender.com/comments').then((res)=>{
       const data = res.data;
       const temp = data.filter((c)=>{
         return c.pdfId===pdfid
@@ -139,7 +139,7 @@ const CommentSection = ({ client, pdfid }) => {
 
 
   const handleDeleteComment = (commentId) => {
-    axios.delete(`http://localhost:5000/deleteComment/${commentId}`).then((res)=>{
+    axios.delete(`https://pdf-manager-s3-v2.onrender.com/deleteComment/${commentId}`).then((res)=>{
       console.log(res.data);
       setReload(prev => prev+1)
     })

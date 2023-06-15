@@ -26,7 +26,7 @@ const Displaycard = ({ _id, name, description, file, createdAt, email, fnToReloa
     const handleDelete = () => {
         // Handle delete logic
 
-        axios.delete(`http://localhost:5000/${_id}`)
+        axios.delete(`https://pdf-manager-s3-v2.onrender.com/${_id}`)
             .then((res) => {
                 console.log(res.data);
                 fnToReload(prev => prev + 1)
@@ -40,8 +40,8 @@ const Displaycard = ({ _id, name, description, file, createdAt, email, fnToReloa
 
     const handleCopy = () => {
         const textField = document.createElement('textarea');
-        // textField.innerText = `http://localhost:5000/pdf/${_id}`;  //this is the aws global link
-        textField.innerText = `http://localhost:3000/viewpdf/${_id}`;
+        // textField.innerText = `https://pdf-manager-s3-v2.onrender.com/pdf/${_id}`;  //this is the aws global link
+        textField.innerText = `https://pdf-manager-s3.netlify.app/viewpdf/${_id}`;
         document.body.appendChild(textField);
         textField.select();
         document.execCommand('copy');

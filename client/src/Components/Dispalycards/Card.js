@@ -11,7 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 const Card = ({ reload, fnToReload, searchString, token }) => {
 
     const [cardData, setCardData] = useState({});
-    const URL = 'http://localhost:5000/'
+    const URL = 'https://pdf-manager-s3-v2.onrender.com/'
 
     useEffect(() => {
         if (searchString) {

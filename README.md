@@ -21,6 +21,10 @@ In addition to the features mentioned earlier, users also have the ability to de
 6. **PDF Searching:**
 To enhance usability and accessibility, a powerful searching functionality has been implemented within the web application. Users can easily search for PDF files based on their names. By entering relevant keywords or the full name of a document into the search bar, the application quickly retrieves and displays matching results. This feature saves time and effort by enabling users to locate specific PDFs efficiently.
 
+7. **AUTHENTICATION:**
+The authentication feature plays a central role in the application, providing a secure and reliable way for users to access their accounts and protect their personal information. It includes user login, user registration, access control etc.
+
+
 **By combining the capabilities of PDF uploading, document management, viewing, commenting, deleting, searching and global link sharing, this web application offers a comprehensive solution for handling PDF files in a user-friendly and efficient manner.**
 ## Installation
 
@@ -113,10 +117,14 @@ Install PDF-manager with npm
 ## Demo
 
 
-https://drive.google.com/file/d/1flqUgnAy1Ts6id2JyRqv-kzD0wG0c4Ae/view?usp=sharing
+https://drive.google.com/file/d/1DYCZaGhA1z9LRZsgzVb-xvZSCXI78k5c/view?usp=sharing
 ## Screenshots
 
 
-![Screenshot (55)](https://github.com/AdiDev0/pdf-manager-s3/assets/85286921/6eabb2ad-89a4-4503-97cc-56798ef90f24)
+![Screenshot (62)](https://github.com/AdiDev0/pdf-manager-s3/assets/85286921/ab69bcb6-0971-424b-ba43-fc5aae1c70dc)
 
-![Screenshot (57)](https://github.com/AdiDev0/pdf-manager-s3/assets/85286921/42faa576-5e46-4069-bd14-617d67fd8c6a)
+![Screenshot (63)](https://github.com/AdiDev0/pdf-manager-s3/assets/85286921/5778312f-2580-498d-8d2c-b6f8d2989ff8)
+
+![Screenshot (64)](https://github.com/AdiDev0/pdf-manager-s3/assets/85286921/aaf6cde9-85c4-4301-a934-729dc19ab17c)
+
+![Screenshot (65)](https://github.com/AdiDev0/pdf-manager-s3/assets/85286921/9609228f-7532-4843-aab2-0d27bc0dc25b)
