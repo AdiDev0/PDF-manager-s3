@@ -1,0 +1,46 @@
+    .container {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: start !important;
+        min-height: 100vh !important;
+        margin-top: 7rem !important;
+    }
+
+    .paper {
+        padding: 16px;
+        width: 100%;
+        max-width: 400px;
+        margin: '0px auto';
+    }
+
+    .avatar {
+
+        background-color: #f50057 !important;
+        margin: 10px auto;
+    }
+
+    .form {
+        width: 100%;
+    }
+
+    .submit-btn {
+        margin-top: 1.5rem !important;
+    }
+
+    .link {
+        text-decoration: none;
+        color: #3f51b5;
+    }
+
+    .navbar {
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        background-color: #1976D2;
+    }
+
+    .navbar-title {
+        display: flex;
+        margin: auto;
+        font-size: 1.5rem;
+    }

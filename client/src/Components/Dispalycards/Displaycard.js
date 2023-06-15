@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Typography, CardActions, Button, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useHistory } from 'react-router-dom';
@@ -6,17 +6,27 @@ import moment from 'moment';
 import axios from 'axios'
 import { Tooltip } from '@mui/material';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import jwt_decode from 'jwt-decode'
 
 
-const Displaycard = ({ _id, name, description, file, createdAt, fnToReload }) => {
+const Displaycard = ({ _id, name, description, file, createdAt, email, fnToReload, token }) => {
     const history = useHistory();
     const [copySuccess, setCopySuccess] = useState(false);
 
+    const [clientEmail , setClientEmail] = useState('');
+
+
+    useEffect(()=>{
+        if(token){
+          const decodedToken = jwt_decode(token);
+          setClientEmail(decodedToken.email);
+        }
+      }, [token])
 
     const handleDelete = () => {
         // Handle delete logic
 
-        axios.delete(`https://pdf-manager-s3.onrender.com/${_id}`)
+        axios.delete(`http://localhost:5000/${_id}`)
             .then((res) => {
                 console.log(res.data);
                 fnToReload(prev => prev + 1)
@@ -25,12 +35,13 @@ const Displaycard = ({ _id, name, description, file, createdAt, fnToReload }) =>
 
 
     const handleClick = () => {
-        history.push({ pathname: '/viewpdf', state: { id: _id, name: name } });
+        history.push({ pathname: `/viewpdf/${_id}`, state: { id: _id, name: name } });
     }
 
     const handleCopy = () => {
         const textField = document.createElement('textarea');
-        textField.innerText = `https://pdf-manager-s3.onrender.com/pdf/${_id}`;
+        // textField.innerText = `http://localhost:5000/pdf/${_id}`;  //this is the aws global link
+        textField.innerText = `http://localhost:3000/viewpdf/${_id}`;
         document.body.appendChild(textField);
         textField.select();
         document.execCommand('copy');
@@ -64,9 +75,9 @@ const Displaycard = ({ _id, name, description, file, createdAt, fnToReload }) =>
                 <Button size="small" color="primary" onClick={handleClick} sx={{ mt: 0 }}>
                     View File
                 </Button>
-                <IconButton onClick={handleDelete} style={{ marginLeft: 'auto' }}>
+                {token && clientEmail===email && <IconButton onClick={handleDelete} style={{ marginLeft: 'auto' }}>
                     <DeleteIcon sx={{ fontSize: "1rem" }} />
-                </IconButton>
+                </IconButton>}
             </CardActions>
         </Card>
     );

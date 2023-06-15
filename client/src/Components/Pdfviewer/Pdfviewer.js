@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 import { Viewer, Worker } from '@react-pdf-viewer/core';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { AppBar, Toolbar, Typography, Button, TextField, IconButton, InputAdornment } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, TextField, IconButton, InputAdornment, Avatar } from '@mui/material';
 import CommentSection from '../CommentSection/CommentSection.js'
 import CircularProgress from '@mui/material/CircularProgress';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -17,16 +18,29 @@ const Pdfviewer = () => {
     const [filedata, setFiledata] = useState(null);
     const [base64fileData, setBase64FileData] = useState('');
     const [id, setId] = useState('');
-    const [name, setName] = useState('');
-    const location = useLocation();
-
-    // const defaultLayoutPluginInstance = defaultLayoutPlugin();
+    const [name, setName] = useState('');  //pdf name
+    const [client, setClient] = useState(''); // client username
+    
+    const temp = useParams();
 
     useEffect(() => {
-        setId(location.state.id);
-        setName(location.state.name);
-
-    }, [location])
+        setId(temp.id);
+        if (id.length > 0) {
+            axios.get(`http://localhost:5000/getName/${id}`)
+                .then((res) => {
+                    console.log(res.data)
+                    setName(res.data.name)
+                })
+        }
+    }, [])
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = jwt_decode(token);
+            console.log(decodedToken)
+            setClient(decodedToken.name);
+        }
+    }, [])
 
     const arrayBufferToBase64 = (buffer) => {
         var binary = '';
@@ -43,7 +57,7 @@ const Pdfviewer = () => {
     useEffect(() => {
         if (id.length > 0) {
             console.log(id)
-            axios.get(`https://pdf-manager-s3.onrender.com/pdf/${id}`, {
+            axios.get(`http://localhost:5000/pdf/${id}`, {
                 responseType: 'arraybuffer',
             })
                 .then((res) => {
@@ -63,6 +77,7 @@ const Pdfviewer = () => {
         history.push('/');
     }
 
+
     return <div>
         <AppBar position="static">
             <Toolbar>
@@ -71,14 +86,15 @@ const Pdfviewer = () => {
                 </IconButton>
                 <div style={{ flexGrow: 1 }}>
                     <Typography variant="h6" component="div" sx={{ marginRight: '2rem' }}>
-                        {name}
+                        {name && name.length>0?<span>{name}</span> : <span>PDF</span>}
                     </Typography>
                 </div>
+                {client && <Avatar sx={{color:'#1976D2', backgroundColor:'white', margin:'1rem 1rem'}}>{client?client.charAt(0):'Z'}</Avatar>}
             </Toolbar>
         </AppBar>
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div className='pdfViewer' style={{ display: 'flex', flexDirection: 'row'}}>
             {base64fileData.length > 0 ? (
-                <div style={{ width: '100%', height: "100%", marginTop: '0.5rem', border: '1px solid #1976D2', borderRadius: '5px' }}>
+                <div className='pdf' style={{ width: '70%', height: "100%", marginTop: '0.5rem', border: '1px solid #1976D2', borderRadius: '5px' }}>
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
                         <Viewer fileUrl={base64fileData}
                         />;
@@ -86,8 +102,8 @@ const Pdfviewer = () => {
                 </div>
             ) : <div><CircularProgress size={100} sx={{ margin: '2rem 2rem', width: '70%', height: "100%" }} color="primary" thickness={5} /></div>}
 
-            <div style={{ width: '30%', marginTop: '2rem' }}>
-                <CommentSection documentId={id} />
+            <div className='comment'>
+                <CommentSection client={client} pdfid={temp.id}/>
             </div>
         </div>
 

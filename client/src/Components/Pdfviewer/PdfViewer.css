@@ -4,3 +4,29 @@
 .rpv-core__text-layer{
     color: white;
 }
+
+.comment{
+    position: 'fixed' ;
+    top: '0' ; 
+    right: '0' ;
+    width: 30%;
+    margin-top: '2rem';
+
+}
+@media screen and (max-width: 500px) {
+    .pdfViewer {
+        display: 'flex';
+        flex-direction: column !important;
+        margin: auto !important;
+    }
+    .pdf{ 
+        width: '100%' !important;
+         margin-top: '0.5rem';
+         border: '1px solid #1976D2';
+        border-radius: '5px' ;
+        }
+    .comment{
+            width: 100%;
+        }
+    
+}

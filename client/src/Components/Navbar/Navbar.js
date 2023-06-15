@@ -1,16 +1,19 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button, TextField, IconButton, InputAdornment } from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import { AppBar, Toolbar, Typography, Button, TextField, IconButton, InputAdornment, Avatar } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { useHistory } from 'react-router-dom';
+import jwt_decode from 'jwt-decode'
 
-const Navbar = ({setSearchString}) => {
+const Navbar = ({setSearchString, token, setToken}) => {
+  const history = useHistory();
+
   const handleLogin = () => {
-    // Perform login logic
-    console.log('Logged in');
+    history.push('/auth')
   };
 
   const handleLogout = () => {
-    // Perform logout logic
-    console.log('Logged out');
+    localStorage.removeItem('token');
+    setToken('');
   };
 
   const handleSearch = (e) => {
@@ -18,6 +21,7 @@ const Navbar = ({setSearchString}) => {
     
     console.log('Search:', e.target.search.value);
   };
+
 
   const handleChange = (e)=>{
     console.log(e.target.value)
@@ -52,13 +56,14 @@ const Navbar = ({setSearchString}) => {
             sx={{ marginRight: '2rem' }}
           />
         </form>
+        {token && <Avatar sx={{color:'#1976D2', backgroundColor:'white', margin:'1rem 1rem'}}>{jwt_decode(token)?.name.charAt(0)}</Avatar>}
         <div>
-          <Button color="inherit" onClick={handleLogin}>
+          {!token && <Button color="inherit" onClick={handleLogin}>
             Login
-          </Button>
-          <Button color="inherit" onClick={handleLogout}>
+          </Button>}
+          {token && <Button color="inherit" onClick={handleLogout}>
             Logout
-          </Button>
+          </Button>}
         </div>
       </Toolbar>
     </AppBar>
