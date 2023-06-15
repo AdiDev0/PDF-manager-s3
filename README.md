@@ -25,7 +25,7 @@ To enhance usability and accessibility, a powerful searching functionality has b
 The authentication feature plays a central role in the application, providing a secure and reliable way for users to access their accounts and protect their personal information. It includes user login, user registration, access control etc.
 
 
-**By combining the capabilities of PDF uploading, document management, viewing, commenting, deleting, searching and global link sharing, this web application offers a comprehensive solution for handling PDF files in a user-friendly and efficient manner.**
+**By combining the capabilities of PDF uploading, document management, viewing, commenting, deleting, searching and global link sharing, this web application offers a comprehensive solution for handling PDF files in a user-friendly and efficient manner. The application is live at https://pdf-manager-s3.netlify.app/auth**
 ## Installation
 
 Install PDF-manager with npm
