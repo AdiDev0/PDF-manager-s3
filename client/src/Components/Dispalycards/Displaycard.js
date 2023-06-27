@@ -9,6 +9,10 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import jwt_decode from 'jwt-decode'
 
 
+const URL = 'http://localhost:5000'
+// const URL = 'https://pdf-manager-s3-v2.onrender.com'
+
+
 const Displaycard = ({ _id, name, description, file, createdAt, email, fnToReload, token }) => {
     const history = useHistory();
     const [copySuccess, setCopySuccess] = useState(false);
@@ -22,11 +26,10 @@ const Displaycard = ({ _id, name, description, file, createdAt, email, fnToReloa
           setClientEmail(decodedToken.email);
         }
       }, [token])
-
+ 
     const handleDelete = () => {
-        // Handle delete logic
 
-        axios.delete(`https://pdf-manager-s3-v2.onrender.com/${_id}`)
+        axios.delete(`${URL}/${_id}`)
             .then((res) => {
                 console.log(res.data);
                 fnToReload(prev => prev + 1)
@@ -40,8 +43,8 @@ const Displaycard = ({ _id, name, description, file, createdAt, email, fnToReloa
 
     const handleCopy = () => {
         const textField = document.createElement('textarea');
-        // textField.innerText = `https://pdf-manager-s3-v2.onrender.com/pdf/${_id}`;  //this is the aws global link
-        textField.innerText = `https://pdf-manager-s3.netlify.app/viewpdf/${_id}`;
+        // textField.innerText = `${URL}/pdf/${_id}`;  //this is the aws global link
+        textField.innerText = `http://localhost:3000/viewpdf/${_id}`;
         document.body.appendChild(textField);
         textField.select();
         document.execCommand('copy');

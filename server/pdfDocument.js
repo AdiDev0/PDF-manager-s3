@@ -14,10 +14,6 @@ const documentSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    file: {
-      type: Object, 
-      required: true
-    },
     awsName: {
       type: String,
       required: true

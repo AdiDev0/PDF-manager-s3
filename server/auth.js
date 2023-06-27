@@ -5,23 +5,35 @@ const secret = 'test';
 const auth = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
+    console.log(token);
     const isCustomAuth = token.length < 500;
 
-    let decodedData;
+    if(token){
+      jwt.verify(token, secret, (err, valid)=>{
+        if(err){
+          res.status(401).send(err)
+        }
+        else{
+          next();
+        }
+      })
+    }
 
-    if (token && isCustomAuth) {      
-      decodedData = jwt.verify(token, secret);
+    // let decodedData;
 
-      req.userId = decodedData?.id;
-    } else {
-      decodedData = jwt.decode(token);
+    // if (token && isCustomAuth) {      
+    //   decodedData = jwt.verify(token, secret);
 
-      req.userId = decodedData?.sub;
-    }    
+    //   req.userId = decodedData?.id;
+    // } else {
+    //   decodedData = jwt.decode(token);
 
-    next();
+    //   req.userId = decodedData?.sub;
+    // }    
+
+    // next();
   } catch (error) {
-    console.log(error);
+    res.send(error)
   }
 };
 

@@ -11,7 +11,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './PdfViewer.css'
 
 
+// const URL = 'https://pdf-manager-s3-v2.onrender.com';
 
+const URL = 'http://localhost:5000'
 
 const Pdfviewer = () => {
     const history = useHistory();
@@ -26,10 +28,13 @@ const Pdfviewer = () => {
     useEffect(() => {
         setId(temp.id);
         if (id.length > 0) {
-            axios.get(`https://pdf-manager-s3-v2.onrender.com/getName/${id}`)
+            axios.get(`${URL}/getName/${id}`)
                 .then((res) => {
                     console.log(res.data)
                     setName(res.data.name)
+                })
+                .catch((e)=>{
+                    console.log(e)
                 })
         }
     }, [])
@@ -57,11 +62,14 @@ const Pdfviewer = () => {
     useEffect(() => {
         if (id.length > 0) {
             console.log(id)
-            axios.get(`https://pdf-manager-s3-v2.onrender.com/pdf/${id}`, {
+            axios.get(`${URL}/pdf/${id}`, {
                 responseType: 'arraybuffer',
             })
                 .then((res) => {
                     setFiledata(res.data);
+                })
+                .catch((e) =>{
+                    console.log(e)
                 })
         }
 
@@ -76,7 +84,7 @@ const Pdfviewer = () => {
     const handleBackButtonClick = () => {
         history.push('/');
     }
-
+    
 
     return <div>
         <AppBar position="static">
@@ -90,6 +98,7 @@ const Pdfviewer = () => {
                     </Typography>
                 </div>
                 {client && <Avatar sx={{color:'#1976D2', backgroundColor:'white', margin:'1rem 1rem'}}>{client?client.charAt(0):'Z'}</Avatar>}
+                
             </Toolbar>
         </AppBar>
         <div className='pdfViewer' style={{ display: 'flex', flexDirection: 'row'}}>

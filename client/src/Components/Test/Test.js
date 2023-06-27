@@ -1,62 +1,74 @@
-import React, { useState } from "react";
-import {data, documentContent} from './base'
-import { Document,Page } from 'react-pdf';
+import React, { useState, useEffect } from 'react'
+import { Viewer, Worker } from '@react-pdf-viewer/core';
+import axios from 'axios';
+import { data } from './base'
+
+const id = '648bdffe02f5b50b096a803a';
+
+const Test = () => {
+
+  const [filedata, setFiledata] = useState({});
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    axios.get(`http://localhost:5000/getPdfTest/${id}`).then((res) => {
+      console.log(res);
+      setFiledata(res.data.file)
+    })
+      .catch((error) => {
+        console.log(error);
+      })
+  }, [])
+
+  useEffect(() => {
+    if (filedata) {
+      // const blob = base64toBlob(filedata.buffer);
+      // const u = URL.createObjectURL(blob);
+      // setUrl(u)
+
+      //   const blob = new Blob([filedata], { type: "application/pdf" });
+      //   console.log(blob)
+      //   const blobUrl = URL.createObjectURL(blob);
+      //   setUrl(blobUrl)
+      // console.log(blobUrl);
 
 
-function Test() {
+      const fileReader = new FileReader();
+      fileReader.onload = function (event) {
+        const u = event.target.result;
+        console.log(u)
+      };
+      fileReader.readAsDataURL(filedata);
+    }
 
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
+  }, [filedata])
 
-  function onDocumentLoadSuccess({numPages}){
-    setNumPages(numPages);
-    setPageNumber(1);
-  }
 
-  function changePage(offSet){
-    setPageNumber(prevPageNumber => prevPageNumber + offSet);
-  }
+  const base64toBlob = (data) => {
+    // Cut the prefix `data:application/pdf;base64` from the raw base 64
+    const base64WithoutPrefix = data.substr('data:application/pdf;base64,'.length);
 
-  function changePageBack(){
-    changePage(-1)
-  }
+    const bytes = atob(base64WithoutPrefix);
+    let length = bytes.length;
+    let out = new Uint8Array(length);
 
-  function changePageNext(){
-    changePage(+1)
-  }
+    while (length--) {
+      out[length] = bytes.charCodeAt(length);
+    }
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <Document file={data} onLoadSuccess={onDocumentLoadSuccess}>
-          <Page height="600" pageNumber={pageNumber} />
-        </Document>
-        <p> Page {pageNumber} of {numPages}</p>
-        { pageNumber > 1 && 
-        <button onClick={changePageBack}>Previous Page</button>
-        }
-        {
-          pageNumber < numPages &&
-          <button onClick={changePageNext}>Next Page</button>
-        }
-      </header>
-      <center>
-        <div>
-          <Document file="/sample.pdf" onLoadSuccess={onDocumentLoadSuccess}>
-            {Array.from(
-              new Array(numPages),
-              (el,index) => (
-                <Page 
-                  key={`page_${index+1}`}
-                  pageNumber={index+1}
-                />
-              )
-            )}
-          </Document>
-        </div>
-      </center>
-    </div>
-  );
+    return new Blob([out], { type: 'application/pdf' });
+  };
+
+
+  return <div style={{
+    border: '1px solid rgba(0, 0, 0, 0.3)',
+    height: '750px',
+  }}>
+    {filedata.length > 0 && <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+      <Viewer fileUrl={url} />;
+    </Worker>}
+  </div>
+
 }
 
-export default Test;
+export default Test

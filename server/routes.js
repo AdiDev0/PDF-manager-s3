@@ -13,6 +13,7 @@ import jwt from "jsonwebtoken";
 import dotenv from 'dotenv'
 
 
+
 const app = express();
 const router = express.Router();
 dotenv.config()
@@ -32,6 +33,15 @@ const s3 = new S3Client({
 
 // fetches all the data from mongoDB for Dashboard
 router.get('/', async (req, res) => {
+
+    // const authHeader = req.headers?.authorization.split(' ')[1];
+    // console.log(authHeader);
+    // const decoded = jwt.decode(authHeader);
+    // console.log(decoded)
+
+    // const bool = jwt.verify(authHeader, 'test')
+    // if(!bool) res.json({'message': 'token not found'})
+    
     try {
         const pdfDocument = await pdfModel.find();
 
@@ -63,8 +73,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 
     const awsName = `${Date.now()}-${req.file.originalname}`
 
-    const newpdfDocument = new pdfModel({ name, description, file, awsName, email });
-    console.log(newpdfDocument)
+    const newpdfDocument = new pdfModel({ name, description, awsName, email });
+    
 
 
     const params = {
@@ -75,11 +85,16 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     }
     const command = new PutObjectCommand(params)
 
-    await s3.send(command)
+    try {
+        await s3.send(command)
 
-    await newpdfDocument.save()
+        await newpdfDocument.save()
 
-    res.status(201).json(newpdfDocument);
+        res.status(201).json(newpdfDocument);
+    } catch (error) {
+        res.send(error)
+    }
+
 
 });
 
@@ -88,21 +103,25 @@ router.delete('/:id', async (req, res) => {
 
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
 
-    const pdfData = await pdfModel.findById(id);
+    try {
+        const pdfData = await pdfModel.findById(id);
 
-    const { awsName } = pdfData;
-    const params = {
-        Bucket: bucketName,
-        Key: awsName
-    };
+        const { awsName } = pdfData;
+        const params = {
+            Bucket: bucketName,
+            Key: awsName
+        };
 
-    const command = new DeleteObjectCommand(params);
+        const command = new DeleteObjectCommand(params);
 
-    await s3.send(command);
+        await s3.send(command);
 
-    await pdfModel.findByIdAndRemove(id);
+        await pdfModel.findByIdAndRemove(id);
 
-    res.json({ message: "Data deleted successfully." });
+        res.json({ message: "Data deleted successfully." });
+    } catch (error) {
+        res.send(error)
+    }
 })
 
 
@@ -114,6 +133,7 @@ router.get('/pdf/:id', async (req, res) => {
     if (!pdfData) {
         return res.status(404).json({ message: 'Document not found' });
     }
+    
 
     const { awsName } = pdfData;
 
@@ -125,6 +145,8 @@ router.get('/pdf/:id', async (req, res) => {
     const command = new GetObjectCommand(params);
     const response = await s3.send(command);
     const pdfContent = response.Body;
+
+    
 
     // this is used to save pdf locally
     // const writeStream = fs.createWriteStream('output.pdf');
@@ -148,6 +170,8 @@ router.get('/pdf/:id', async (req, res) => {
     // res.json({ message: " successfully." });
 });
 
+
+//global link using aws
 router.get('/pdf/getLink/:id', async (req, res) => {
     const { id } = req.params;
 
@@ -175,11 +199,10 @@ const secret = 'test';
 
 router.post('/signin', async (req, res) => {
     const { email, password } = req.body;
-    console.log(req.body)
+    
 
 
     const oldUser = await UserModal.findOne({ email });
-    console.log(oldUser)
 
     if (!oldUser) return res.status(404).json({ message: "User doesn't exist" });
 
@@ -190,22 +213,21 @@ router.post('/signin', async (req, res) => {
     // // }
     // // if (!isPasswordCorrect) return (
     // if (password !== oldUser.password) return (
-    //     windows.alert("Invalid credentials"),
     //     res.status(400).json({ message: "Invalid credentials" }));
 
     // const token = jwt.sign({ email: oldUser.email, id: oldUser._id, name: oldUser.name }, secret, { expiresIn: "1h" });
     // res.status(200).json({ result: oldUser, token });
     let bool = bcrypt.compareSync(password, oldUser.password);
-    if(bool){
+    if (bool) {
         const token = jwt.sign({ email: oldUser.email, id: oldUser._id, name: oldUser.name }, secret, { expiresIn: "1h" });
         res.status(200).json({ result: oldUser, token });
     }
-    else{
+    else {
         res.status(400).json({ message: "Invalid credentials" })
     }
-    
 
-    
+
+
 })
 
 router.post('/signup', async (req, res) => {
@@ -242,14 +264,24 @@ router.get('/comments', async (req, res) => {
 })
 
 router.post('/submitComment', async (req, res) => {
-    const { pdfid, author, comment } = req.body;
-    console.log(req.body)
-    try {
-        const newComment = new commentModal({ author, comment, pdfId: pdfid });
-        await newComment.save()
-        res.json(newComment);
-    } catch (error) {
-        res.send(error)
+    const { pdfid, author, comment, reply, commentId } = req.body;
+    
+    if(reply==='reply'){
+        const pdfData = await commentModal.findById(commentId);
+
+        const prevReplies = [...pdfData.replies];
+        prevReplies.push({author: author, reply: comment});
+        const updatedComment = await commentModal.findByIdAndUpdate(commentId, { replies: prevReplies }, { new: true });
+        res.send(updatedComment)
+    }
+    else{
+        try {
+            const newComment = new commentModal({ author, comment, pdfId: pdfid});
+            await newComment.save()
+            res.json(newComment);
+        } catch (error) {
+            res.send(error)
+        }
     }
 })
 
@@ -258,11 +290,58 @@ router.delete('/deleteComment/:id', async (req, res) => {
 
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
 
-    const comment = await commentModal.findById(id);
+    try {
+        const comment = await commentModal.findById(id);
 
-    await commentModal.findByIdAndRemove(id);
+        await commentModal.findByIdAndRemove(id)
 
-    res.json({ message: "Comment deleted successfully." });
+        res.json({ message: "Comment deleted successfully." });
+    }
+    catch (error) {
+        res.send(error)
+    }
+
+
+})
+
+router.delete('/deletereply/:id', async (req, res) => {
+    const { id } = req.params;
+    const {author, reply} = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No reply with id: ${id}`);
+
+    try {
+        const comment = await commentModal.findById(id);
+        console.log(comment)
+
+        const newReplies = comment.replies.filter((r)=>{
+            if(r.author===author && r.reply===reply) return false;
+            return true;
+        })
+        const updatedComment = await commentModal.findByIdAndUpdate(id, { replies: newReplies }, { new: true });
+
+        res.send(updatedComment);
+    }
+    catch (error) {
+        res.send(error)
+    }
+
+
+})
+
+
+
+
+
+router.get('/getPdfTest/:id', async(req, res)=>{
+    const {id} = req.params;
+
+    try{
+        const pdfData = await pdfModel.findById(id);
+        res.send(pdfData);
+    }catch(error){
+        res.send(error);
+    }
 })
 
 export default router;

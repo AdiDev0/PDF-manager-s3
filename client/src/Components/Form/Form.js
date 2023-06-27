@@ -4,7 +4,9 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode'
 
 
-const URL = 'https://pdf-manager-s3-v2.onrender.com';
+// const URL = 'https://pdf-manager-s3-v2.onrender.com';
+const URL = 'http://localhost:5000'
+
 
 const Form = ({ fnToReload, token }) => {
   const [formdata, setFormdata] = useState({ name: '', description: '', file: null, email:'' });

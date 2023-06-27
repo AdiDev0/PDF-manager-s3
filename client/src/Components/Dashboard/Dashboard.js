@@ -14,7 +14,7 @@ const Dashboard = () => {
   
   useEffect(()=>{
     setToken(localStorage.getItem('token'))
-  })
+  }, [localStorage.getItem('token')])
 
   useEffect(() => {
     console.log(reload);
