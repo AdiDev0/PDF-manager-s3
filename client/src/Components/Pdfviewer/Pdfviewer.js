@@ -11,9 +11,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './PdfViewer.css'
 
 
-// const URL = 'https://pdf-manager-s3-v2.onrender.com';
+const URL = 'https://pdf-manager-s3-v2.onrender.com';
 
-const URL = 'http://localhost:5000'
+// const URL = 'http://localhost:5000'
 
 const Pdfviewer = () => {
     const history = useHistory();

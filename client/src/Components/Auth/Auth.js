@@ -10,8 +10,8 @@ import './Auth.css'
 
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
-// const URL = 'https://pdf-manager-s3-v2.onrender.com';
-const URL = 'http://localhost:5000';
+const URL = 'https://pdf-manager-s3-v2.onrender.com';
+// const URL = 'http://localhost:5000';
 
 const Auth = () => {
   const [form, setForm] = useState(initialState);
